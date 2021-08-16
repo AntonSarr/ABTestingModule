@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[9]:
-
-
 import os.path
 import pandas as pd
 from os import mkdir, rename
@@ -11,6 +5,7 @@ from joblib import dump, load
 from shutil import rmtree
 
 class ABTest:
+    """Class for creating and evaluating A/B tests. Instance of the class is one A/B test."""
     
     def __init__(self, research_id : int, description, start_date, end_date, is_active=False):
         
@@ -102,10 +97,11 @@ class ABTest:
                 return self.getABLists()
             
         def evaluateABTest(self, contracts, list_name, strategy='general'):
-            """Paramaters:
+            """Evaluates results of A/B test, i.e. conversion rate of lists A or B. There are two ways of working: conversion rate of the entire list (strategy='general') and conversion rate grouped by sources in the list (strategy='by_source').
+            Paramaters:
             \tcontracts : pandas.DataFrame objects with contracts information containing columns 'CLIENT_ID', 'DATE_BEG' in format 'YYYY-MM-DD'
             \tlist_name : must be either 'A' or 'B'
-            \tstrategy : must be either 'general' or 'ff'"""
+            \tstrategy : must be either 'general' or 'by_source'"""
             
             contracts_cpy = contracts.copy()
             contracts_cpy['CONTRACT_FLAG'] = 1
@@ -133,6 +129,7 @@ class ABTest:
             return evalueted
         
 class Storage:
+    """Class for storing and keeping A/B tests. Based on .xlsx file with columns 'id', 'description', 'start_date', 'end_date', 'is_active'"""
     
     def __init__(self, file_path):
         
